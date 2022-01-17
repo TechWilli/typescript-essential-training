@@ -10,7 +10,7 @@ dando mais segurança na manipulação de dados em projetos no geral
 // *************************************************************************
 
 // ------------------------------------------------------------------------------------
-/* Tipos primitivos: string, number (aceita int e float) e boolean */
+/* [SEÇÃO] - Tipos primitivos: string, number (aceita int e float) e boolean */
 const firstName: string = 'William'
 const lastName: string = 'Stark'
 
@@ -27,7 +27,7 @@ const isProgrammer: boolean = true
 
 
 // ------------------------------------------------------------------------------------
-/* Type:
+/* [SEÇÃO] - Type:
   Existem dois tipos de tipagem no TS:
   Type annotation - o que foi feito acima, definindo o tipo do dado manualmente
   Type inference - o TS identifica e define o tipo para nós
@@ -44,7 +44,7 @@ console.log(resultadoFinal)
 
 
 // ------------------------------------------------------------------------------------
-/* Arrays - definimos com o [] após o tipo da variável. Geralmente populamos arrays com apenas um tipo */
+/* [SEÇÃO] - Arrays - definimos com o [] após o tipo da variável. Geralmente populamos arrays com apenas um tipo */
 const amigos: string[] = ['Tony', 'Peter', 'Steve', 'Wanda']
 // amigos.push(5) acusa o erro Argument of type 'number' is not assignable to parameter of type 'string'.
 
@@ -59,14 +59,14 @@ const primeirosNumerosPares: Array<number> = [2, 4, 6, 8]
 
 
 // ------------------------------------------------------------------------------------
-/* O tipo any deve ser pouco usado. Apenas quando realmente nao tem importância o tipo do valor da variável.
+/* [SEÇÃO] - O tipo any deve ser pouco usado. Apenas quando realmente nao tem importância o tipo do valor da variável.
   Ou tanbém em arrays que armazenam vários tipos de valores
 */
 const arrayDoido: any = ['William', 'teste', 22, ['a', 'b', 'c'], { nome: 'Alex', idade: 33 }]
 // ------------------------------------------------------------------------------------
 
 // ------------------------------------------------------------------------------------
-/* Tipos dos parâmetros das funções */
+/* [SEÇÃO] - Tipos dos parâmetros das funções */
 function imprimeNome(nome: string) {
   return `Seu nome é ${nome}`
 }
@@ -82,21 +82,95 @@ console.log(soma(10, 5))
 
 
 // ------------------------------------------------------------------------------------
-/* Tipo do retorno da função */
+/* [SEÇÃO] - Tipo do retorno da função */
 function saudacao(): string {
   // return 5 como o retorno da função deve ser string, se retornasse qualquer outro tipo, daria erro na compilação
   return 'Seja bem vindo ao meu arquivo de estudos de Typescrip'
 }
+
+function valorPI(): number {
+  return Math.PI
+}
+
+console.log('valor do PI:', valorPI())
 // ------------------------------------------------------------------------------------
 
 
 // ------------------------------------------------------------------------------------
-/* Declarando tipos de objetos */
+/* [SEÇÃO] - Declarando tipos de objetos. No exemplo estamos configurando que o parametro pessoa deve ser um objeto com as chaves dos tipos especificados */
 function recebeObjetoParametro(pessoa: { nome: string, idade: number }) {
   console.log('nome:', pessoa.nome)
   console.log('idade:', pessoa.idade)
 }
 
-// recebeObjetoParametro('william') dá o erro Argument of type 'string' is not assignable to parameter of type '{ nome: string; idade: number; }'
+// recebeObjetoParametro('william') -> dá o erro Argument of type 'string' is not assignable to parameter of type '{ nome: string; idade: number; }'
+// recebeObjetoParametro({ nome: 'William', idade: '22' }) -> mostra o erro Type 'string' is not assignable to type 'number'. The expected type comes from property 'idade' which is declared here on type '{ nome: string; idade: number; }'
 recebeObjetoParametro({ nome: 'William', idade: 22 })
+// ------------------------------------------------------------------------------------
+
+
+// ------------------------------------------------------------------------------------
+/* [SEÇÃO] - Parâmetros opcionais da função. usando o "?" antes do ":" na especificação do do tipo */
+function calculaMediaNotas(nota1: number, nota2: number, recuperacao?: number) {
+  let mediaFinal: number
+
+  // recuperação é um parâmetro opcional
+  if (recuperacao) {
+    mediaFinal = (nota1 + nota2 + recuperacao) / 3
+  } else {
+    mediaFinal = (nota1 + nota2) / 2
+  }
+
+  console.log(`A média final do aluno é ${mediaFinal.toFixed(2)}`)
+}
+
+calculaMediaNotas(4.8, 2.8, 9)
+
+function mostraNomeCompleto(nome: string, sobrenome?: string): string {
+  return `${nome} ${sobrenome ?? ''}`.trim() // trim para caso noa tenha o sobrenome, nao ter o espaço final
+}
+
+console.log('mostra nome completo:', mostraNomeCompleto('Tony', 'Stark'))
+// caso o sobrneome nao for passado, não haverá erro
+console.log('mostra nome completo:', mostraNomeCompleto('Peter'))
+// ------------------------------------------------------------------------------------
+
+
+// ------------------------------------------------------------------------------------
+/* [SEÇÃO] -  */
+// ------------------------------------------------------------------------------------
+
+
+// ------------------------------------------------------------------------------------
+/* [SEÇÃO] -  */
+// ------------------------------------------------------------------------------------
+
+
+// ------------------------------------------------------------------------------------
+/* [SEÇÃO] -  */
+// ------------------------------------------------------------------------------------
+
+
+// ------------------------------------------------------------------------------------
+/* [SEÇÃO] -  */
+// ------------------------------------------------------------------------------------
+
+
+// ------------------------------------------------------------------------------------
+/* [SEÇÃO] -  */
+// ------------------------------------------------------------------------------------
+
+
+// ------------------------------------------------------------------------------------
+/* [SEÇÃO] -  */
+// ------------------------------------------------------------------------------------
+
+
+// ------------------------------------------------------------------------------------
+/* [SEÇÃO] -  */
+// ------------------------------------------------------------------------------------
+
+
+// ------------------------------------------------------------------------------------
+/* [SEÇÃO] -  */
 // ------------------------------------------------------------------------------------
