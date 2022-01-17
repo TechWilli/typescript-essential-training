@@ -137,12 +137,42 @@ console.log('mostra nome completo:', mostraNomeCompleto('Peter'))
 
 
 // ------------------------------------------------------------------------------------
-/* [SEÇÃO] -  */
+/* [SEÇÃO] - Type Alias. Essa é uma forma de encurtar a verbosidade das definições de union que possam ser muito longas */
+
+// Exemplo sem alias, usando union normal
+const dadoDoBack: string | number | boolean = 'teste'
+
+// para não ficar muito extenso na mesma linha de declaração, podemos fazer assim:
+type dadoBack = string | number | boolean
+const dadoBackDois: dadoBack = 'teste 2'
+
+type alfanumerico = string | number
+let valorAlfanumerico: alfanumerico = '1999'
+valorAlfanumerico = 1999
+
 // ------------------------------------------------------------------------------------
 
 
 // ------------------------------------------------------------------------------------
-/* [SEÇÃO] -  */
+/* [SEÇÃO] - Interfaces. Usada para criar tipagem para objetos. Muito utilizada em React, por exmeplo */
+
+interface Pessoa {
+  nome: string,
+  idade: number,
+  trabalha: boolean
+}
+
+const amigo: Pessoa = {
+  nome: 'Mel',
+  idade: 17,
+  trabalha: true
+}
+
+function apresentaAmigo(amigo: Pessoa) {
+  console.log(`Este amigo se chama ${amigo.nome}, tem ${amigo.idade} anos e ${amigo.trabalha ? 'já está trabalhando' : 'ainda não trabalha'}.`)
+}
+
+apresentaAmigo(amigo)
 // ------------------------------------------------------------------------------------
 
 
