@@ -154,13 +154,21 @@ valorAlfanumerico = 1999
 
 
 // ------------------------------------------------------------------------------------
-/* [SEÇÃO] - Interfaces. Usada para criar tipagem para objetos. Muito utilizada em React, por exmeplo */
+/* [SEÇÃO] - Interfaces. Usada para criar tipagem para objetos. Muito utilizada em React, por exmeplo
+  Ela pode ser alterada, diferente do alias que não
+*/
 
 interface Pessoa {
   nome: string,
   idade: number,
   trabalha: boolean
 }
+
+// posso implementar mais tipos à Pessoa que não terá problema
+// interface Pessoa {
+//   sexo: string
+// }
+// mostrará o erro na variável "amigo" -> Property 'sexo' is missing in type '{ nome: string; idade: number; trabalha: true; }' but required in type 'Pessoa'.
 
 const amigo: Pessoa = {
   nome: 'Mel',
@@ -177,7 +185,19 @@ apresentaAmigo(amigo)
 
 
 // ------------------------------------------------------------------------------------
-/* [SEÇÃO] -  */
+/* [SEÇÃO] - Type literals. Podemos passar valores em si. Isso é bastante útil com union. */
+function mostraPosicao(direcao: 'top' | 'right' | 'bottom' | 'left') {
+  console.log(`A posição selecionada foi: ${direcao}`)
+}
+
+mostraPosicao('top') // não acusa erro, pois está nos tipos que definimos
+// mostraPosicao('acima') // Argument of type '"acima"' is not assignable to parameter of type '"top" | "right" | "bottom" | "left"'. 
+
+function oitoOuOitenta(valor: 8 | 80) {
+  console.log(`Não tem meio termo, é 8 ou 80. Você escolheu ${valor}`)
+}
+
+oitoOuOitenta(80)
 // ------------------------------------------------------------------------------------
 
 
