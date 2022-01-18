@@ -261,20 +261,100 @@ console.log('O resultado da operação aritmética de soma foi:', somaDoisValore
 
 
 // ------------------------------------------------------------------------------------
-/* [SEÇÃO] -  */
+/* [SEÇÃO] - Generic Functions. Usadas para trabalhar com dados mais heterogêneos,
+  onde não sabemos exatamente o que virá, mas podemos definir como virá, da seguinte forma:
+*/
+
+// Por convenção, usamos T ou U para generic types
+// a função é genérica pois tem o <> antes de sua assinatura, o tipo do parametro é um array de genéricos e retorna algo genérico
+function firstArrayElement<T>(array: T[]): T {
+  return array[0]
+}
+
+console.log('Primeiro elemento do array:', firstArrayElement([1, 2, 3, 4]))
+console.log('Primeiro elemento do array:', firstArrayElement(['a', 'b', 'c']))
+console.log('Primeiro elemento do array:', firstArrayElement(['will', 2, false]))
+
+function lastArrayElement<U>(array: U[]): U {
+  return array[array.length - 1]
+}
+
+console.log('Último elemento do array:', lastArrayElement([1, 2, 3, 4]))
+
+// podemos restringir em constraints os generics com tipos específicos também, desta forma:
+// extendendo os tipos que queremos no generic
+function maiorEntreDoisValores<T extends number | string>(n1: T, n2: T): T {
+  if (Number(n1) > Number(n2)) {
+    return n1
+
+  } else {
+    return n2
+  }
+}
+
+console.log('maiorEntreDoisValores:', maiorEntreDoisValores(5, 10))
+console.log('maiorEntreDoisValores:', maiorEntreDoisValores('25', '10'))
+// console.log('maiorEntreDoisValores:', maiorEntreDoisValores(5, '10')) // aqui ele acusa erro, pois ou deve ser string ou number, um de cada nao é permitido, graças à constraint
+
+function mergeArrays<T>(arr1: T[], arr2: T[]) {
+  return [...arr1, ...arr2]
+}
+
+// isso também é possível, definir as constraints do generic ao executá-lo
+console.log('mergeArrays:', mergeArrays<number | string>([1, 2, 3, 4], ['a', 'b', 'c']))
 // ------------------------------------------------------------------------------------
 
 
 // ------------------------------------------------------------------------------------
-/* [SEÇÃO] -  */
+/* [SEÇÃO] - Type unknown. Semelhante ao any, mas exige narrowing para tipos nao primitivos como array e objeto */
+function retornaValor(valor: unknown) {
+
+  if (Array.isArray(valor)) {
+    console.log('valor', valor[0])
+  }
+
+  console.log('valor',  valor)
+}
 // ------------------------------------------------------------------------------------
 
 
 // ------------------------------------------------------------------------------------
-/* [SEÇÃO] -  */
+/* [SEÇÃO] - Rest parameters. Semelhante ao JS. Neste caso basta apenas tipar o que vem com o rest operator */
+function somaVariosNumeros(...numeros: number[]): number {
+  const valorFinal = numeros.reduce((accumulator, currentValue) => {
+    return accumulator += currentValue
+  }, 0)
+
+  return valorFinal
+}
+
+console.log('soma vários números:', somaVariosNumeros(1, 2, 3, 4, 5, 6, 7, 8, 9))
+
 // ------------------------------------------------------------------------------------
 
 
 // ------------------------------------------------------------------------------------
-/* [SEÇÃO] -  */
+/* [SEÇÃO] - Destructuring */
+function revelaIdentidadeHomemAranha({ nome, sobrenome }: { nome: string, sobrenome: string }): void {
+  console.log(`Nome completo: ${nome} ${sobrenome}`)
+}
+
+const homemAranha = {
+  nome: 'Peter',
+  sobrenome: 'Parker'
+}
+
+revelaIdentidadeHomemAranha(homemAranha)
+
+// ou com interface para definir o shape do objeto passado
+interface IdentidadeHeroi {
+  nome: string,
+  sobrenome: string
+}
+
+function revelaHeroi({ nome, sobrenome }: IdentidadeHeroi) {
+    console.log(`Identidade do Herói: ${nome} ${sobrenome}`)
+}
+
+revelaHeroi(homemAranha)
 // ------------------------------------------------------------------------------------
