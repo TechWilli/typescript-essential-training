@@ -137,7 +137,22 @@ console.log('mostra nome completo:', mostraNomeCompleto('Peter'))
 
 
 // ------------------------------------------------------------------------------------
-/* [SEÇÃO] -  */
+/* [SEÇÃO] - Tipo union é usado para dar mais de uma opção para o tipo do dado.
+  A quantidade de opções nós que decidimos separando pelo caractere "|"
+*/
+function mostraSaldo(saldo: string | number) {
+  console.log(`Seu saldo é de ${saldo} reais`)
+}
+
+mostraSaldo(500.25)
+mostraSaldo('1.500,25')
+
+// Com arrays podemos usar da seguinte forma:
+// é a opção ideal para usar no lugar do any quando há necessidade de receber valores diversos
+const arrayDiverso: Array<number | string | boolean> = [1, 'w', true, 555]
+
+console.log('Array com tipos de dados diversos:', arrayDiverso)
+
 // ------------------------------------------------------------------------------------
 
 
