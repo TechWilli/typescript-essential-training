@@ -221,7 +221,42 @@ oitoOuOitenta(80)
 
 
 // ------------------------------------------------------------------------------------
-/* [SEÇÃO] -  */
+/* [SEÇÃO] - tipando funções de callback */
+const saudacaoFrase = (name: string): void => {
+    console.log(`Olá, ${name}!`)
+}
+
+// podemos tipar desta forma uma função de callback:
+// aqui além do argumento nomePessoa, passamos o callback sendo tipado como uma função que recebe uma string e retorna vazio
+const saudarPessoa = (nomePessoa: string, saudacaoCallback: (name: string) => void): void => {
+    saudacaoCallback(nomePessoa)
+}
+
+saudarPessoa('William', saudacaoFrase)
+
+// outro exemplo, aqui tipamos o callback de parametro sendo uma função vazia
+function chamaCallback(callback: () => void) {
+    callback()
+}
+
+function callback() {
+    console.log('Oi, eu sou uma função callback executada dentro de outra função')
+}
+
+chamaCallback(callback)
+
+// podemos deixar melhor estruturado o tipo da função colocando em um type para ela
+type Operacao = (num1: number, num2: number) => number
+
+function somaDoisValores(valor1: number, valor2: number, operacao: Operacao): number {
+    return operacao(valor1, valor2)
+}
+
+function somaNumeros(v1: number, v2: number): number {
+    return v1 + v2
+}
+
+console.log('O resultado da operação aritmética de soma foi:', somaDoisValores(10, 5, somaNumeros))
 // ------------------------------------------------------------------------------------
 
 
