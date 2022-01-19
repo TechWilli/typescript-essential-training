@@ -69,6 +69,10 @@ function saudacao() {
 function valorPI() {
     return Math.PI;
 }
+// há também o retorno vazio (void) onde não há de fato retorno de algum valor para a função
+function cumprimento() {
+    console.log('Olá, tudo bem com você?');
+}
 console.log('valor do PI:', valorPI());
 // ------------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------------
@@ -117,23 +121,50 @@ const arrayDiverso = [1, 'w', true, 555];
 console.log('Array com tipos de dados diversos:', arrayDiverso);
 // ------------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------------
-/* [SEÇÃO] -  */
+/* [SEÇÃO] - Type Alias. Essa é uma forma de encurtar a verbosidade das definições de union que possam ser muito longas */
+// Exemplo sem alias, usando union normal
+const dadoDoBack = 'teste';
+const dadoBackDois = 'teste 2';
+let valorAlfanumerico = '1999';
+valorAlfanumerico = 1999;
+// posso implementar mais tipos à Pessoa que não terá problema
+// interface Pessoa {
+//   sexo: string
+// }
+// mostrará o erro na variável "amigo" -> Property 'sexo' is missing in type '{ nome: string; idade: number; trabalha: true; }' but required in type 'Pessoa'.
+const amigo = {
+    nome: 'Mel',
+    idade: 17,
+    trabalha: true
+};
+function apresentaAmigo(amigo) {
+    console.log(`Este amigo se chama ${amigo.nome}, tem ${amigo.idade} anos e ${amigo.trabalha ? 'já está trabalhando' : 'ainda não trabalha'}.`);
+}
+apresentaAmigo(amigo);
 // ------------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------------
-/* [SEÇÃO] -  */
-// ------------------------------------------------------------------------------------
-// ------------------------------------------------------------------------------------
-/* [SEÇÃO] -  */
-// ------------------------------------------------------------------------------------
-// ------------------------------------------------------------------------------------
-/* [SEÇÃO] -  */
-// ------------------------------------------------------------------------------------
-// ------------------------------------------------------------------------------------
-/* [SEÇÃO] -  */
-// ------------------------------------------------------------------------------------
-// ------------------------------------------------------------------------------------
-/* [SEÇÃO] -  */
-// ------------------------------------------------------------------------------------
-// ------------------------------------------------------------------------------------
-/* [SEÇÃO] -  */
-// ------------------------------------------------------------------------------------
+/* [SEÇÃO] - Type literals. Podemos passar valores em si. Isso é bastante útil com union. */
+function mostraPosicao(direcao) {
+    console.log(`A posição selecionada foi: ${direcao}`);
+}
+mostraPosicao('top'); // não acusa erro, pois está nos tipos que definimos
+// mostraPosicao('acima') // Argument of type '"acima"' is not assignable to parameter of type '"top" | "right" | "bottom" | "left"'. 
+function oitoOuOitenta(valor) {
+    console.log(`Não tem meio termo, é 8 ou 80. Você escolheu ${valor}`);
+}
+oitoOuOitenta(80);
+/**
+ * @param review valor de 1 a 5 ou false
+ * @returns frase com a avaliação em estrelas dada pelo usuário
+ */
+function obterReviewUsuario(review) {
+    if (!review) {
+        return `o Usuário não deixou uma review`;
+    }
+    else if (review >= 1 && review <= 5) {
+        return `O usuário avaliou com ${review} ${review === 1 ? 'estrela' : 'estrelas'}`;
+    }
+}
+console.log(obterReviewUsuario(false));
+console.log(obterReviewUsuario(4));
+console.log(obterReviewUsuario(5));
