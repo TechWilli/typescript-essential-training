@@ -223,24 +223,24 @@ oitoOuOitenta(80)
 // ------------------------------------------------------------------------------------
 /* [SEÇÃO] - tipando funções de callback */
 const saudacaoFrase = (name: string): void => {
-    console.log(`Olá, ${name}!`)
+  console.log(`Olá, ${name}!`)
 }
 
 // podemos tipar desta forma uma função de callback:
 // aqui além do argumento nomePessoa, passamos o callback sendo tipado como uma função que recebe uma string e retorna vazio
 const saudarPessoa = (nomePessoa: string, saudacaoCallback: (name: string) => void): void => {
-    saudacaoCallback(nomePessoa)
+  saudacaoCallback(nomePessoa)
 }
 
 saudarPessoa('William', saudacaoFrase)
 
 // outro exemplo, aqui tipamos o callback de parametro sendo uma função vazia
 function chamaCallback(callback: () => void) {
-    callback()
+  callback()
 }
 
 function callback() {
-    console.log('Oi, eu sou uma função callback executada dentro de outra função')
+  console.log('Oi, eu sou uma função callback executada dentro de outra função')
 }
 
 chamaCallback(callback)
@@ -249,11 +249,11 @@ chamaCallback(callback)
 type Operacao = (num1: number, num2: number) => number
 
 function somaDoisValores(valor1: number, valor2: number, operacao: Operacao): number {
-    return operacao(valor1, valor2)
+  return operacao(valor1, valor2)
 }
 
 function somaNumeros(v1: number, v2: number): number {
-    return v1 + v2
+  return v1 + v2
 }
 
 console.log('O resultado da operação aritmética de soma foi:', somaDoisValores(10, 5, somaNumeros))
@@ -313,7 +313,7 @@ function retornaValor(valor: unknown) {
     console.log('valor', valor[0])
   }
 
-  console.log('valor',  valor)
+  console.log('valor', valor)
 }
 // ------------------------------------------------------------------------------------
 
@@ -353,8 +353,108 @@ interface IdentidadeHeroi {
 }
 
 function revelaHeroi({ nome, sobrenome }: IdentidadeHeroi) {
-    console.log(`Identidade do Herói: ${nome} ${sobrenome}`)
+  console.log(`Identidade do Herói: ${nome} ${sobrenome}`)
 }
 
 revelaHeroi(homemAranha)
+// ------------------------------------------------------------------------------------
+
+
+// ------------------------------------------------------------------------------------
+/* [SEÇÃO] - Função genérica com algumas constraints. Nestes casos,
+  são aceitos dados que satisfaçam ao menos as condições que definimos ao generic
+*/
+
+/* 
+uma função bem genérica no que faz, pois ela apresenta um animal indepedente de seu filo, suas características, esse
+generic espera ao menos um nome para este animal
+*/
+
+interface Animal {
+  nome: string
+}
+
+function apresentarAnimal<T extends Animal>(animal: T) {
+
+  console.log('Apresentação do Animal:')
+  for (let [key, value] of Object.entries(animal)) {
+    console.log(`${key}: ${value}`)
+  }
+}
+
+const gato = { nome: 'Gato', filo: 'Cordados', comunicacao: 'Miado' }
+// funciona pois tem a constraint nome satisfeita. passando um objeto com pelo menos o nome, não dá erro
+apresentarAnimal(gato)
+
+// const animalSemNome = { filo: 'Desconhecido' }
+// acusa erro, dizendo que o nome está faltando e é obrigatório na constraint do T
+// apresentarAnimal(animalSemNome)
+// ------------------------------------------------------------------------------------
+
+
+// ------------------------------------------------------------------------------------
+/* [SEÇÃO] - Juntando Generics com Interfaces. Essa combinação torma mais poderoso
+    o trabalho da tipagem do objeto que você está lidando
+*/
+
+// interface para algo no geral
+interface Thing<T, U> {
+  name: string
+  color: string
+  eat: T
+  speak: U
+  language?: string // ? para deixar propriedade opcional
+}
+
+// agora podemos criar os tipos de cados combinando as interfaces com o type alias
+// como a intefrace tem dois genericts especificados, é obrigadtório passar os tipos para T e U aqui
+type PessoaType = Thing<string, boolean>
+type Caneta = Thing<boolean, boolean>
+
+const friend: PessoaType = {
+  name: 'Miles Morales',
+  color: 'black',
+  eat: 'food',
+  speak: true,
+  language: 'english'
+}
+
+const caneta: Caneta = {
+  name: 'Caneta BIC ponta fina',
+  color: 'azul',
+  eat: false,
+  speak: false,
+}
+
+console.log(friend)
+console.log(caneta)
+
+/* Explicação: Nestes exemplos acima, podemos controlar com cada type (Pessoa e Caneta)
+o que passar no argumento do generic, podendo assim através de umai
+nterface mais genérica, criar tipos que se moldam de acordo com o que queremos fazer */
+// ------------------------------------------------------------------------------------
+
+
+// ------------------------------------------------------------------------------------
+/* [SEÇÃO] - Keyof parameter. determinar que alguma chave passada no
+  parametro da função, esteja presente no objeto também do paramtro da função
+*/
+
+function getKeyOfObject<T, K extends keyof T>(obj: T, key: K) {
+
+  if (!obj[key]) {
+    return `Não há valor para a chave "${key}"`
+  }
+
+  return `A chave ${key} está presente no objeto e tem o valor ${obj[key]}`
+}
+
+const pet = {
+  nome: 'Vicolina',
+  tipo: 'gato',
+}
+
+console.log(getKeyOfObject(pet, 'nome'))
+console.log(getKeyOfObject(pet, 'tipo'))
+// console.log(getKeyOfObject(pet, 'a')) // acusa o erro -> Argument of type '"a"' is not assignable to parameter of type '"nome" | "tipo"'
 // ------------------------------------------------------------------------------------
