@@ -222,3 +222,244 @@ function oitoOuOitenta(valor: 8 | 80) {
 }
 
 oitoOuOitenta(80)
+// ------------------------------------------------------------------------------------
+
+
+// ------------------------------------------------------------------------------------
+/* [SEÇÃO] - tipando funções de callback */
+const saudacaoFrase = (name: string): void => {
+  console.log(`Olá, ${name}!`)
+}
+
+// podemos tipar desta forma uma função de callback:
+// aqui além do argumento nomePessoa, passamos o callback sendo tipado como uma função que recebe uma string e retorna vazio
+const saudarPessoa = (nomePessoa: string, saudacaoCallback: (name: string) => void): void => {
+  saudacaoCallback(nomePessoa)
+}
+
+saudarPessoa('William', saudacaoFrase)
+
+// outro exemplo, aqui tipamos o callback de parametro sendo uma função vazia
+function chamaCallback(callback: () => void) {
+  callback()
+}
+
+function callback() {
+  console.log('Oi, eu sou uma função callback executada dentro de outra função')
+}
+
+chamaCallback(callback)
+
+// podemos deixar melhor estruturado o tipo da função colocando em um type para ela
+type Operacao = (num1: number, num2: number) => number
+
+function somaDoisValores(valor1: number, valor2: number, operacao: Operacao): number {
+  return operacao(valor1, valor2)
+}
+
+function somaNumeros(v1: number, v2: number): number {
+  return v1 + v2
+}
+
+console.log('O resultado da operação aritmética de soma foi:', somaDoisValores(10, 5, somaNumeros))
+// ------------------------------------------------------------------------------------
+
+
+// ------------------------------------------------------------------------------------
+/* [SEÇÃO] - Generic Functions. Usadas para trabalhar com dados mais heterogêneos,
+  onde não sabemos exatamente o que virá, mas podemos definir como virá, da seguinte forma:
+*/
+
+// Por convenção, usamos T ou U para generic types
+// a função é genérica pois tem o <> antes de sua assinatura, o tipo do parametro é um array de genéricos e retorna algo genérico
+function firstArrayElement<T>(array: T[]): T {
+  return array[0]
+}
+
+console.log('Primeiro elemento do array:', firstArrayElement([1, 2, 3, 4]))
+console.log('Primeiro elemento do array:', firstArrayElement(['a', 'b', 'c']))
+console.log('Primeiro elemento do array:', firstArrayElement(['will', 2, false]))
+
+function lastArrayElement<U>(array: U[]): U {
+  return array[array.length - 1]
+}
+
+console.log('Último elemento do array:', lastArrayElement([1, 2, 3, 4]))
+
+// podemos restringir em constraints os generics com tipos específicos também, desta forma:
+// extendendo os tipos que queremos no generic
+function maiorEntreDoisValores<T extends number | string>(n1: T, n2: T): T {
+  if (Number(n1) > Number(n2)) {
+    return n1
+
+  } else {
+    return n2
+  }
+}
+
+console.log('maiorEntreDoisValores:', maiorEntreDoisValores(5, 10))
+console.log('maiorEntreDoisValores:', maiorEntreDoisValores('25', '10'))
+// console.log('maiorEntreDoisValores:', maiorEntreDoisValores(5, '10')) // aqui ele acusa erro, pois ou deve ser string ou number, um de cada nao é permitido, graças à constraint
+
+function mergeArrays<T>(arr1: T[], arr2: T[]) {
+  return [...arr1, ...arr2]
+}
+
+// isso também é possível, definir as constraints do generic ao executá-lo
+console.log('mergeArrays:', mergeArrays<number | string>([1, 2, 3, 4], ['a', 'b', 'c']))
+// ------------------------------------------------------------------------------------
+
+
+// ------------------------------------------------------------------------------------
+/* [SEÇÃO] - Type unknown. Semelhante ao any, mas exige narrowing para tipos nao primitivos como array e objeto */
+function retornaValor(valor: unknown) {
+
+  if (Array.isArray(valor)) {
+    console.log('valor', valor[0])
+  }
+
+  console.log('valor', valor)
+}
+// ------------------------------------------------------------------------------------
+
+
+// ------------------------------------------------------------------------------------
+/* [SEÇÃO] - Rest parameters. Semelhante ao JS. Neste caso basta apenas tipar o que vem com o rest operator */
+function somaVariosNumeros(...numeros: number[]): number {
+  const valorFinal = numeros.reduce((accumulator, currentValue) => {
+    return accumulator += currentValue
+  }, 0)
+
+  return valorFinal
+}
+
+console.log('soma vários números:', somaVariosNumeros(1, 2, 3, 4, 5, 6, 7, 8, 9))
+
+// ------------------------------------------------------------------------------------
+
+
+// ------------------------------------------------------------------------------------
+/* [SEÇÃO] - Destructuring */
+function revelaIdentidadeHomemAranha({ nome, sobrenome }: { nome: string, sobrenome: string }): void {
+  console.log(`Nome completo: ${nome} ${sobrenome}`)
+}
+
+const homemAranha = {
+  nome: 'Peter',
+  sobrenome: 'Parker'
+}
+
+revelaIdentidadeHomemAranha(homemAranha)
+
+// ou com interface para definir o shape do objeto passado
+interface IdentidadeHeroi {
+  nome: string,
+  sobrenome: string
+}
+
+function revelaHeroi({ nome, sobrenome }: IdentidadeHeroi) {
+  console.log(`Identidade do Herói: ${nome} ${sobrenome}`)
+}
+
+revelaHeroi(homemAranha)
+// ------------------------------------------------------------------------------------
+
+
+// ------------------------------------------------------------------------------------
+/* [SEÇÃO] - Função genérica com algumas constraints. Nestes casos,
+  são aceitos dados que satisfaçam ao menos as condições que definimos ao generic
+*/
+
+/* 
+uma função bem genérica no que faz, pois ela apresenta um animal indepedente de seu filo, suas características, esse
+generic espera ao menos um nome para este animal
+*/
+
+interface Animal {
+  nome: string
+}
+
+function apresentarAnimal<T extends Animal>(animal: T) {
+
+  console.log('Apresentação do Animal:')
+  for (let [key, value] of Object.entries(animal)) {
+    console.log(`${key}: ${value}`)
+  }
+}
+
+const gato = { nome: 'Gato', filo: 'Cordados', comunicacao: 'Miado' }
+// funciona pois tem a constraint nome satisfeita. passando um objeto com pelo menos o nome, não dá erro
+apresentarAnimal(gato)
+
+// const animalSemNome = { filo: 'Desconhecido' }
+// acusa erro, dizendo que o nome está faltando e é obrigatório na constraint do T
+// apresentarAnimal(animalSemNome)
+// ------------------------------------------------------------------------------------
+
+
+// ------------------------------------------------------------------------------------
+/* [SEÇÃO] - Juntando Generics com Interfaces. Essa combinação torma mais poderoso
+    o trabalho da tipagem do objeto que você está lidando
+*/
+
+// interface para algo no geral
+interface Thing<T, U> {
+  name: string
+  color: string
+  eat: T
+  speak: U
+  language?: string // ? para deixar propriedade opcional
+}
+
+// agora podemos criar os tipos de cados combinando as interfaces com o type alias
+// como a intefrace tem dois genericts especificados, é obrigadtório passar os tipos para T e U aqui
+type PessoaType = Thing<string, boolean>
+type Caneta = Thing<boolean, boolean>
+
+const friend: PessoaType = {
+  name: 'Miles Morales',
+  color: 'black',
+  eat: 'food',
+  speak: true,
+  language: 'english'
+}
+
+const caneta: Caneta = {
+  name: 'Caneta BIC ponta fina',
+  color: 'azul',
+  eat: false,
+  speak: false,
+}
+
+console.log(friend)
+console.log(caneta)
+
+/* Explicação: Nestes exemplos acima, podemos controlar com cada type (Pessoa e Caneta)
+o que passar no argumento do generic, podendo assim através de umai
+nterface mais genérica, criar tipos que se moldam de acordo com o que queremos fazer */
+// ------------------------------------------------------------------------------------
+
+
+// ------------------------------------------------------------------------------------
+/* [SEÇÃO] - Keyof parameter. determinar que alguma chave passada no
+  parametro da função, esteja presente no objeto também do paramtro da função
+*/
+
+function getKeyOfObject<T, K extends keyof T>(obj: T, key: K) {
+
+  if (!obj[key]) {
+    return `Não há valor para a chave "${key}"`
+  }
+
+  return `A chave ${key} está presente no objeto e tem o valor ${obj[key]}`
+}
+
+const pet = {
+  nome: 'Vicolina',
+  tipo: 'gato',
+}
+
+console.log(getKeyOfObject(pet, 'nome'))
+console.log(getKeyOfObject(pet, 'tipo'))
+// console.log(getKeyOfObject(pet, 'a')) // acusa o erro -> Argument of type '"a"' is not assignable to parameter of type '"nome" | "tipo"'
+// ------------------------------------------------------------------------------------
